@@ -1,14 +1,23 @@
 # baal-abi-decode
 
+## Install Bun
 
-## Install
+Guide: https://bun.sh/docs/installation
+
+## Install Dependencies
 
 ```
-yarn install
+bun install
+```
+
+## Setup Env
+
+```
+cp sample.env .env
 ```
 
 ## Run
 
 ```
-yarn decode
+bun decode --network=<network> --baal=<dao-address> --proposal=<proposal-id>
 ```

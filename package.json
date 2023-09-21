@@ -1,16 +1,27 @@
 {
   "name": "baal-abi-decode",
   "version": "1.0.0",
-  "main": "index.js",
   "author": "dan13ram",
   "license": "MIT",
   "scripts": {
-    "decode": "ts-node decode.ts"
+    "decode": "bun run src/index.ts",
+    "format": "prettier --write \"src/**/*\""
+  },
+  "module": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
   },
   "dependencies": {
+    "@daohaus/keychain-utils": "^0.2.3",
+    "@daohaus/moloch-v3-data": "^0.2.3",
+    "@shazow/whatsabi": "^0.8.5",
+    "ethers": "^6.7.1",
     "ethers-multisend": "^2.4.0",
+    "prettier": "^3.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
-    "viem": "^1.10.9"
+    "viem": "^1.10.9",
+    "wagmi": "^1.4.2"
   }
 }
