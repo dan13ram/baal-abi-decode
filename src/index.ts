@@ -1,3 +1,4 @@
+import { fetchDaoData } from "./daoData";
 import { decodeMultiCall } from "./decodeAction";
 import { prettyPrint } from "./helpers";
 import { parseArgs } from "./parseArgs";
@@ -11,6 +12,11 @@ const main = async () => {
   console.log("Proposal ID:", args.proposalId);
   console.log("\n");
 
+  const dao = await fetchDaoData(args);
+  console.log("DAO Name:", dao.name);
+  console.log("DAO Description:", dao.description);
+  console.log("\n");
+
   const proposal = await fetchProposalData(args);
   console.log("Proposal Title:", proposal.title);
   console.log("Proposal Description:", proposal.description);
@@ -19,10 +25,6 @@ const main = async () => {
   console.log("Proposal By:", proposal.proposedBy);
   console.log("Proposal Data:", proposal.proposalData);
   console.log("\n");
-
-  if (proposal.proposalType !== "MULTICALL") {
-    throw new Error("Proposal type is not MULTICALL");
-  }
 
   if (!proposal.proposalData || proposal.proposalData === "0x") {
     throw new Error("Proposal data is empty");

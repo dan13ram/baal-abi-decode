@@ -35,7 +35,7 @@ type FunctionDataWithInputsReturnType = {
 };
 
 export const decodeFunctionDataWithInputs = (
-  options: FunctionDataWithInputs
+  options: FunctionDataWithInputs,
 ): FunctionDataWithInputsReturnType => {
   const result = decodeFunctionData(options);
 

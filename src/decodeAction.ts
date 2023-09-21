@@ -11,7 +11,9 @@ export const decodeAction = async (
   to: `0x${string}`,
   data: `0x${string}`,
 ): Promise<any> => {
-  const provider = new ethers.JsonRpcProvider(args.rpcUrl);
+  const provider = new ethers.JsonRpcProvider(
+    args.chain.rpcUrls.default.http[0],
+  );
   const { abi } = await whatsabi.autoload(to, {
     provider,
     followProxies: true,
@@ -31,11 +33,7 @@ export const decodeAction = async (
     data,
   });
 
-  if (
-    result.functionName === "multiSend" &&
-    result.inputs.length === 1 &&
-    result.inputs[0].name === "transactions"
-  ) {
+  if (result.functionName === "multiSend" && result.inputs.length === 1) {
     const decodedActions = await decodeMultiCall(args, data);
 
     return {
@@ -45,17 +43,10 @@ export const decodeAction = async (
   }
 
   if (result.functionName.toLowerCase().includes("exec")) {
-    const inputTo = result.inputs.find(
-      (input) => input.name === "to" || input.name === "_to",
-    );
-    const inputData = result.inputs.find(
-      (input) => input.name === "data" || input.name === "_data",
-    );
-    const inputValue = result.inputs.find(
-      (input) => input.name === "value" || input.name === "_value",
-    );
+    const inputTo = result.inputs.find((input) => input.type === "address");
+    const inputData = result.inputs.find((input) => input.type === "bytes");
 
-    if (!inputTo || !inputData || !inputValue) {
+    if (!inputTo || !inputData) {
       return result;
     }
 

@@ -18,7 +18,6 @@ export type Args = {
   chainId: ValidNetwork;
   baal: Hex;
   proposalId: number;
-  rpcUrl: string;
   loader: loaders.ABILoader;
 };
 
@@ -72,18 +71,6 @@ const NETWORK_TO_CHAIN_ID: Record<string, Hex> = {
   polygon: "0x89",
   optimism: "0xa",
   arbitrum: "0xa4b1",
-};
-
-const NETWORK_TO_RPC: Record<string, string> = {
-  mainnet: "https://mainnet.infura.io/v3/8093dcb119b440229a29700f4d70245a",
-  goerli: "https://goerli.infura.io/v3/8093dcb119b440229a29700f4d70245a",
-  gnosis: "https://rpc.gnosischain.com",
-  polygon:
-    "https://polygon-mainnet.infura.io/v3/8093dcb119b440229a29700f4d70245a",
-  optimism:
-    "https://optimism-mainnet.infura.io/v3/8093dcb119b440229a29700f4d70245a",
-  arbitrum:
-    "https://arbitrum-mainnet.infura.io/v3/8093dcb119b440229a29700f4d70245a",
 };
 
 const ETHERSCAN_API_URL: Record<string, string> = {
@@ -163,7 +150,6 @@ const validateArgs = (args: Record<string, string>): Args => {
     chainId: chainId as ValidNetwork,
     baal: args.baal,
     proposalId: num,
-    rpcUrl: NETWORK_TO_RPC[args.network],
     loader,
   };
 };
