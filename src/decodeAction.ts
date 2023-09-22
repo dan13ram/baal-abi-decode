@@ -9,24 +9,17 @@ import { whatsabi } from "@shazow/whatsabi";
 export const decodeAction = async (
   args: Args,
   to: `0x${string}`,
-  data: `0x${string}`,
-): Promise<any> => {
-  const provider = new ethers.JsonRpcProvider(
-    args.chain.rpcUrls.default.http[0],
-  );
+  data: `0x${string}`
+): Promise<Record<string, any>> => {
+  if (!data || data === "0x" || !data.startsWith("0x")) {
+    return {};
+  }
+
   const { abi } = await whatsabi.autoload(to, {
-    provider,
+    provider: new ethers.JsonRpcProvider(args.chain.rpcUrls.default.http[0]),
     followProxies: true,
     abiLoader: args.loader,
   });
-
-  if (!data || data === "0x" || !data.startsWith("0x")) {
-    return {
-      functionName: "unknown",
-      to: to,
-      data: data,
-    };
-  }
 
   const result = decodeFunctionDataWithInputs({
     abi,
@@ -47,13 +40,16 @@ export const decodeAction = async (
     const inputData = result.inputs.find((input) => input.type === "bytes");
 
     if (!inputTo || !inputData) {
-      return result;
+      return {
+        ...result,
+        decodedData: {},
+      };
     }
 
     const decodedData = await decodeAction(
       args,
       inputTo.value as `0x${string}`,
-      inputData.value as `0x${string}`,
+      inputData.value as `0x${string}`
     );
 
     return {
@@ -67,7 +63,7 @@ export const decodeAction = async (
 
 export const decodeMultiCall = async (
   args: Args,
-  data: string,
+  data: string
 ): Promise<any[]> => {
   const proposalActions = decodeMultiWithOperation(data);
 
@@ -78,10 +74,10 @@ export const decodeMultiCall = async (
         decodedData: await decodeAction(
           args,
           action.to as `0x${string}`,
-          action.data as `0x${string}`,
+          action.data as `0x${string}`
         ),
       };
-    }),
+    })
   );
 
   return decodedProposalActions;
